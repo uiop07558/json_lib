@@ -266,6 +266,6 @@ ds_status ds_um_deleteStrk_##name (ds_um_Map_##name* map, char* key, T value) {\
 }\
 \
 \
-inline ds_um_ValueStatus_##name ds_um_getStrk_##name(ds_um_Map_##name* map, void* key) {\
-  return ds_um_get_##name(&map, key, strlen(key)+1);\
+ds_um_ValueStatus_##name ds_um_getStrk_##name (ds_um_Map_##name* map, void* key) {\
+  return ds_um_get_##name(map, key, strlen(key)+1);\
 }

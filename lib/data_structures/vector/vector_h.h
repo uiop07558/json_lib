@@ -13,7 +13,7 @@ typedef struct ds_Vector_##name {\
 \
 ds_status ds_vec_initVector_##name(ds_Vector_##name* vec, size_t elemNumber);\
 \
-static ds_status ds_vec__expandCapacity_##name(ds_Vector_##name* vec);\
+ds_status ds_vec_concatArray_##name(ds_Vector_##name* vec, T* array, size_t arrlen);\
 \
 ds_status ds_vec_appendElement_##name(ds_Vector_##name* vec, T elem);\
 \

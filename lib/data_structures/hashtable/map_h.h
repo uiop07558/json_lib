@@ -14,9 +14,9 @@ typedef struct ds_um_Node_##name {\
   unsigned int _isDeleted: 1;\
   unsigned int _strMode: 1;\
 \
-  T value;\
   uint32_t keySize;\
   void* key;\
+  T value;\
 } ds_um_Node_##name;\
 \
 typedef struct ds_um_Map_##name {\
@@ -59,4 +59,4 @@ ds_status ds_um_insertStrk_##name (ds_um_Map_##name* map, char* key, T value);\
 \
 ds_status ds_um_deleteStrk_##name (ds_um_Map_##name* map, char* key, T value);\
 \
-inline ds_um_ValueStatus_##name ds_um_getStrk_##name(ds_um_Map_##name* map, void* key);
+ds_um_ValueStatus_##name ds_um_getStrk_##name(ds_um_Map_##name* map, void* key);
