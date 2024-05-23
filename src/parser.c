@@ -254,7 +254,7 @@ static inline json_Status parseValue(ds_Vector_token* tokenList, size_t i, json_
     output->data.boolean = true;
     return json_status_OK;
   }
-  else if (token->type == LiteralTrue) {
+  else if (token->type == LiteralNull) {
     output->type = json_Null;
     output->data.boolean = 0;
     return json_status_OK;

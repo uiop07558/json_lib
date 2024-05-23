@@ -1,5 +1,6 @@
 #pragma once
 
+#include <stddef.h>
 #include "../include/status.h"
 #include "../include/value.h"
 

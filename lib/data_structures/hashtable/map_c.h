@@ -6,6 +6,9 @@
 #define __HASH2PRIME_MIN_VALUE_DECREASE_FACTOR 0.4
 #define __CAPACITY_EXPANSION_FACTOR 2
 
+#define __max(a, b) ((a) > (b) ? (a) : (b))
+#define __min(a, b) ((a) < (b) ? (a) : (b))
+
 #define DS_UM_INIT_TYPE_CODE(T, name)\
 static inline uint32_t findSmallestPrime(uint32_t start);\
 \
@@ -244,7 +247,7 @@ ds_status ds_um_insertStrk_##name (ds_um_Map_##name* map, char* key, T value) {\
   if (storedKey == NULL) {\
     return DS_ALLOC_ERROR;\
   }\
-  strcpy_s(storedKey, keySize, key);\
+  strcpy(storedKey, key);\
 \
   return insertInternal(map, storedKey, keySize, value, 1);\
 }\

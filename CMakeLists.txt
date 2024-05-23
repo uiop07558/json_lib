@@ -7,8 +7,9 @@ add_subdirectory(lib/data_structures)
 option(DEBUG, OFF)
 
 if (DEBUG)
-  set(CMAKE_CXX_FLAGS "-O0 -g3")
+  set(CMAKE_CXX_FLAGS "-O0 -g3 -lm")
 endif()
+set(CMAKE_CXX_FLAGS "-O3 -lm")
 
 add_library(json_lib 
 src/lexer.c 
@@ -24,6 +25,8 @@ src/destructor.c
 
 target_link_libraries(json_lib PUBLIC data_structures)
 target_include_directories(json_lib PUBLIC data_structures)
+
+target_link_libraries(json_lib PUBLIC m)
 
 if (DEBUG)
   add_executable(test_lexer test/test_lexer.c)

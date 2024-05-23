@@ -1,3 +1,4 @@
+#include <byteswap.h>
 #include "hash.h"
 
 // implementation of xxhash3
@@ -98,7 +99,7 @@ uint64_t ds_h_xxHash364(uint8_t* input, size_t length) {
     for (size_t i = 4; i < length; i++) {
       inputLast |= ((uint32_t) input[i] << (8*(i-4)));
     }
-    uint64_t modSeed = seed ^ ((uint64_t) _byteswap_uint64(seed & 0xFFFFFFFFULL));
+    uint64_t modSeed = seed ^ ((uint64_t) bswap_64(seed & 0xFFFFFFFFULL));
 
     uint64_t words[2]; 
     words[0] = ((uint64_t*) secret)[1];
@@ -130,7 +131,7 @@ uint64_t ds_h_xxHash364(uint8_t* input, size_t length) {
     uint64_t high = ((words[2] ^ words[3]) - seed) ^ inputLast;
     __uint128_t mul = (__uint128_t) low * (__uint128_t) high;
     uint64_t* mul64 = (uint64_t*) &mul;
-    uint64_t value = _byteswap_uint64(low) + high + (mul64[0] ^ mul64[1]) + length;
+    uint64_t value = bswap_64(low) + high + (mul64[0] ^ mul64[1]) + length;
     return _xxAval(value);
   }
   else if (length >= 17 && length <= 240) {

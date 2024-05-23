@@ -2,6 +2,9 @@
 #include "../include/value.h"
 #include "../include/value_map_def.h"
 
+#define __max(a, b) ((a) > (b) ? (a) : (b))
+#define __min(a, b) ((a) < (b) ? (a) : (b))
+
 // DS_UM_INIT_TYPE_CODE(json_Value, value)
 
 static inline uint32_t findSmallestPrime(uint32_t start);
@@ -241,7 +244,7 @@ ds_status ds_um_insertStrk_value (ds_um_Map_value* map, char* key, json_Value va
   if (storedKey == NULL) {
     return DS_ALLOC_ERROR;
   }
-  strcpy_s(storedKey, keySize, key);
+  strcpy(storedKey, key);
 
   return insertInternal(map, storedKey, keySize, value, 1);
 }
