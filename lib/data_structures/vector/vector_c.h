@@ -63,6 +63,7 @@ ds_status ds_vec_concatArray_##name(ds_Vector_##name* vec, T* array, size_t arrl
   }\
 \
   memcpy(vec->buf + vec->len, array, arrlen * sizeof(T));\
+  vec->len += arrlen;\
 \
   return DS_OK;\
 }\

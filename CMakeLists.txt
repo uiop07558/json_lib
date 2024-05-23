@@ -7,9 +7,10 @@ add_subdirectory(lib/data_structures)
 option(DEBUG, OFF)
 
 if (DEBUG)
-  set(CMAKE_CXX_FLAGS "-O0 -g3 -lm")
+  set(CMAKE_CXX_FLAGS "-O0 -g3")
+  set(CMAKE_EXE_LINKER_FLAGS "-g3")
+  set(CMAKE_BUILD_TYPE Debug)
 endif()
-set(CMAKE_CXX_FLAGS "-O3 -lm")
 
 add_library(json_lib 
 src/lexer.c 

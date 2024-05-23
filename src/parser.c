@@ -301,6 +301,10 @@ static json_Status parseArray(ds_Vector_token* tokenList, size_t start, json_Val
 
       ds_vec_appendElement_value(array, value);
     }
+    else if (token->type == RightSquareBr) {
+      i++;
+      break;
+    }
     else if (token->type != Comma) {
       *offset = 0;
       status = json_status_InvalidInput;
@@ -366,6 +370,10 @@ static json_Status parseObject(ds_Vector_token* tokenList, size_t start, json_Va
       ds_um_insertStrk_value(map, key.data.string, value);
 
       json_destroy(&key);
+    }
+    else if (token->type == RightCurlyBr) {
+      i++;
+      break;
     }
     else if (token->type != Comma) {
       status = json_status_InvalidInput;

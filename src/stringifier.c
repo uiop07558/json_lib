@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <math.h>
 #include <stdio.h>
+#include <float.h>
 
 #include "../include/char_vector_def.h"
 #include "../include/value_vector_def.h"
@@ -28,19 +29,19 @@ json_Status stringifyStringInternal(char* str, size_t len, ds_Vector_char* outpu
       ds_vec_concatArray_char(output, "\\\"", 2);
     }
     else if (curChr == '\b') {
-      ds_vec_concatArray_char(output, "\\\b", 2);
+      ds_vec_concatArray_char(output, "\\b", 2);
     }
     else if (curChr == '\f') {
-      ds_vec_concatArray_char(output, "\\\f", 2);
+      ds_vec_concatArray_char(output, "\\f", 2);
     }
     else if (curChr == '\n') {
-      ds_vec_concatArray_char(output, "\\\n", 2);
+      ds_vec_concatArray_char(output, "\\n", 2);
     }
     else if (curChr == '\r') {
-      ds_vec_concatArray_char(output, "\\\r", 2);
+      ds_vec_concatArray_char(output, "\\r", 2);
     }
     else if (curChr == '\t') {
-      ds_vec_concatArray_char(output, "\\\t", 2);
+      ds_vec_concatArray_char(output, "\\t", 2);
     }
     else {
       ds_vec_appendElement_char(output, curChr);
@@ -57,10 +58,15 @@ json_Status stringifyString(json_Value* value, ds_Vector_char* output) {
 }
 
 json_Status stringifyNumber(json_Value* value, ds_Vector_char* output) {
-  char numString[256] = {'\0'};
-  size_t len = snprintf(numString, 256, "%g", value->data.number);
-
-  ds_vec_concatArray_char(output, numString, len);
+  double number = value->data.number;
+  if (isnan(number) || isinf(number)) {
+    ds_vec_concatArray_char(output, "null", 4);
+  }
+  else {
+    char numString[256] = {'\0'};
+    size_t len = snprintf(numString, 256, "%g", number);
+    ds_vec_concatArray_char(output, numString, len);
+  }
 
   return json_status_OK;
 }
@@ -121,20 +127,20 @@ json_Status stringifyObject(json_Value* value, ds_Vector_char* output) {
     ds_vec_appendElement_char(output, ',');
   }
 
-  ds_vec_appendElement_char(output, '}');
+  output->buf[output->len - 1] = '}';
 
   return json_status_OK;
 }
 
-json_Status json_stringify(json_Value* value, char* output, size_t* len) {
+json_Status json_stringify(json_Value* value, char** output, size_t* len) {
   ds_Vector_char chars;
   ds_vec_initVector_char(&chars, 0);
 
   json_Status status = stringifyValue(value, &chars);
   ds_vec_appendElement_char(&chars, '\0');
 
-  output = (char*) malloc(chars.len);
-  memcpy(output, chars.buf, chars.len);
+  *output = (char*) calloc(chars.len, sizeof(char));
+  memcpy(*output, chars.buf, chars.len);
 
   *len = chars.len;
 
