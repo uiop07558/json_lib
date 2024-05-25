@@ -11,7 +11,7 @@ typedef struct ds_Vector_value ds_Vector_value;
 typedef struct ds_um_Map_value ds_um_Map_value;
 
 typedef enum json_ValueType {
-  json_Object,
+  json_Object = 1,
   json_Array,
   json_String,
   json_Number,

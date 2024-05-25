@@ -102,7 +102,7 @@ json_Status stringifyValue(json_Value* value, ds_Vector_char* output) {
 json_Status stringifyArray(json_Value* value, ds_Vector_char* output) {
   json_Status errStatus;
   ds_vec_appendElement_char(output, '[');
-  for (size_t i = 0; i < value->data.arr->len - 1; i++) {
+  for (size_t i = 0; i < value->data.arr->len; i++) {
     RETURN_JSON_ERROR(stringifyValue(value->data.arr->buf + i, output), errStatus)
     ds_vec_appendElement_char(output, ',');
   }

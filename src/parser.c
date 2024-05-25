@@ -43,7 +43,7 @@ static json_Status parseNumber(Token* token, json_Value* output) {
   int64_t exponent = 0;
 
   double number = 0;
-  for (size_t i = (size_t) negative; i < token->len; i++) {
+  for (int64_t i = (int64_t) negative; i < token->len; i++) {
     char curChr = token->str[i];
     if (curChr == '.' && flPoint == -1 && expPos == -1) {
       flPoint = i;
@@ -88,16 +88,16 @@ static json_Status parseNumber(Token* token, json_Value* output) {
 }
 
 static size_t parseUnicodeEsc(Token* token, size_t pos, ds_Vector_char* string) {
-  size_t retval = 0;
-  if ((pos + 4) < token->len) {
-    return retval;
+  size_t offset = 0;
+  if ((pos + 4) >= token->len) {
+    return offset;
   }
 
   uint32_t codepoint = 0;
   bool pair = ((pos + 10) < token->len) && (token->str[pos + 5] == '\\') && (token->str[pos + 6] == 'u');
 
   if (!pair) {
-    retval = 4;
+    offset = 4;
 
     codepoint += hexChrToInt(token->str[pos + 1]);
     codepoint *= 16;
@@ -128,13 +128,13 @@ static size_t parseUnicodeEsc(Token* token, size_t pos, ds_Vector_char* string) 
     low += hexChrToInt(token->str[pos + 10]);
 
     if (high >= 0xD800 && high <= 0xDBFF && low >= 0xDC00 && low <= 0xDFFF) {
-      retval = 10;
+      offset = 10;
       high = (high - 0xD800) * 0x400;
       low = low - 0xDC00;
       codepoint = high + low + 0x10000;
     }
     else {
-      retval = 4;
+      offset = 4;
       codepoint = high;
     }
   }
@@ -168,7 +168,7 @@ static size_t parseUnicodeEsc(Token* token, size_t pos, ds_Vector_char* string) 
     ds_vec_appendElement_char(string, fourth);
   }
 
-  return retval;
+  return offset;
 }
 
 static json_Status parseString(Token* token, json_Value* output) {
@@ -292,29 +292,29 @@ static json_Status parseArray(ds_Vector_token* tokenList, size_t start, json_Val
     if (IS_VALUE(token)) {
       json_Value value;
       status = parseValue(tokenList, i, &value, offset);
-      i += *offset;
 
       if (status != json_status_OK) {
         *offset = 0;
         return status;
       }
+      i += *offset;
 
       ds_vec_appendElement_value(array, value);
     }
-    else if (token->type == RightSquareBr) {
-      i++;
-      break;
-    }
+    // else if (token->type == RightSquareBr) {
+    //   i++;
+    //   break;
+    // }
     else if (token->type != Comma) {
-      *offset = 0;
       status = json_status_InvalidInput;
+      *offset = 0;
       return status;
     }
 
     i++;
   }
 
-  *offset += i - start;
+  *offset = i - start + 1;
   return status;
 }
 
@@ -335,7 +335,7 @@ static json_Status parseObject(ds_Vector_token* tokenList, size_t start, json_Va
   output->data.obj = map;
 
   size_t i = start;
-  while (tokenList->buf[i].type != RightSquareBr && i < tokenList->len) {
+  while (tokenList->buf[i].type != RightCurlyBr && i < tokenList->len) {
     Token* token = tokenList->buf + i;
     if (token->type == String) {
       json_Value key;
@@ -384,7 +384,7 @@ static json_Status parseObject(ds_Vector_token* tokenList, size_t start, json_Va
     i++;
   }
 
-  *offset = i - start;
+  *offset = i - start + 1;
   return status;
 }
 

@@ -224,6 +224,7 @@ ds_status ds_um_initIterator_value(ds_um_Map_value* map, ds_um_Iterator_value* i
 }
 
 ds_status ds_um_iterate_value(ds_um_Iterator_value* iter) {
+  if (iter->_map == NULL) return DS_ELEM_NOT_EXIST;
   while (iter->curIndex < iter->_map->_cap) {
     uint32_t i = iter->curIndex;
     if (iter->_map->_buf[i]._isFilled && !iter->_map->_buf[i]._isDeleted) {
