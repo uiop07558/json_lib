@@ -146,7 +146,9 @@ json_Status json_stringify(json_Value* value, char** output, size_t* len) {
   *output = (char*) calloc(chars.len, sizeof(char));
   memcpy(*output, chars.buf, chars.len);
 
-  *len = chars.len;
+  if (len != NULL) {
+    *len = chars.len;
+  }
 
   ds_vec_destroyVector_char(&chars);
 
