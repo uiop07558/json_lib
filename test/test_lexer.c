@@ -27,7 +27,7 @@ int main() {
   ds_Vector_token tokens;
   ds_vec_initVector_token(&tokens, 0);
   
-  lexer(str, &tokens);
+  lexer(str, size, &tokens);
   printf("size: %d\n", tokens.len);
   for (size_t i = 0; i < tokens.len; i++) {
     printToken(&tokens.buf[i], str);

@@ -9,7 +9,7 @@
 #define __max(a, b) ((a) > (b) ? (a) : (b))
 #define __min(a, b) ((a) < (b) ? (a) : (b))
 
-#define DS_UM_INIT_TYPE_CODE(T, name)\\
+#define DS_UM_INIT_TYPE_CODE(T, name) \
 static inline uint32_t findSmallestPrime(uint32_t start);\
 \
 static uint32_t findBucket(ds_um_Map_##name* map, void* key, uint32_t keySize);\
