@@ -1,6 +1,6 @@
 #pragma once
 
-#define __LOAD_FACTOR_THRESHOLD 0.75
+#define __LOAD_FACTOR_THRESHOLD 0.7
 #define __DEL_LOAD_FACTOR_THRESHOLD 0.6
 #define __INIT_CAP 11
 #define __HASH2PRIME_MIN_VALUE_DECREASE_FACTOR 0.4
@@ -9,7 +9,7 @@
 #define __max(a, b) ((a) > (b) ? (a) : (b))
 #define __min(a, b) ((a) < (b) ? (a) : (b))
 
-#define DS_UM_INIT_TYPE_CODE(T, name)\
+#define DS_UM_INIT_TYPE_CODE(T, name)\\
 static inline uint32_t findSmallestPrime(uint32_t start);\
 \
 static uint32_t findBucket(ds_um_Map_##name* map, void* key, uint32_t keySize);\
@@ -227,6 +227,7 @@ ds_status ds_um_initIterator_##name(ds_um_Map_##name* map, ds_um_Iterator_##name
 }\
 \
 ds_status ds_um_iterate_##name(ds_um_Iterator_##name* iter) {\
+  if (iter->_map == NULL) return DS_ELEM_NOT_EXIST;\
   while (iter->curIndex < iter->_map->_cap) {\
     uint32_t i = iter->curIndex;\
     if (iter->_map->_buf[i]._isFilled && !iter->_map->_buf[i]._isDeleted) {\
@@ -267,7 +268,6 @@ ds_status ds_um_deleteStrk_##name (ds_um_Map_##name* map, char* key, T value) {\
   free(curNode->key);\
   return DS_OK;\
 }\
-\
 \
 ds_um_ValueStatus_##name ds_um_getStrk_##name (ds_um_Map_##name* map, void* key) {\
   return ds_um_get_##name(map, key, strlen(key)+1);\
