@@ -126,8 +126,12 @@ json_Status stringifyObject(json_Value* value, ds_Vector_char* output) {
     RETURN_JSON_ERROR(stringifyValue(&iter.curNode->value, output), errStatus)
     ds_vec_appendElement_char(output, ',');
   }
-
-  output->buf[output->len - 1] = '}';
+  if (output->buf[output->len - 1] == ',') {
+    output->buf[output->len - 1] = '}';
+  }
+  else {
+    ds_vec_appendElement_char(output, '}');
+  }
 
   return json_status_OK;
 }

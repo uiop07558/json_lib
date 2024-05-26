@@ -7,9 +7,7 @@
 #define IS_DIGIT(chr) ((chr == '0') || (chr == '1') || (chr == '2') || (chr == '3') || (chr == '4') || \
                        (chr == '5') || (chr == '6') || (chr == '7') || (chr == '8') || (chr == '9'))
 
-void lexer(char* input, ds_Vector_token* tokenList) {
-  size_t len = strlen(input);
-
+void lexer(char* input, size_t len, ds_Vector_token* tokenList) {
   Token curTok = {NULL, 0, Empty};
   size_t i = 0;
   while (i < len) {

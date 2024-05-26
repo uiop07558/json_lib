@@ -388,13 +388,35 @@ static json_Status parseObject(ds_Vector_token* tokenList, size_t start, json_Va
   return status;
 }
 
-json_Status json_parser(const char* input, json_Value* output) {
+json_Status json_parser(const char* input, json_Value* output) {  
+  size_t len = strlen(input);
+
   json_Status ret = json_status_OK;
 
   ds_Vector_token tokenList;
   ds_vec_initVector_token(&tokenList, 0);
 
-  lexer(input, &tokenList);
+  lexer(input, len, &tokenList);
+  if (tokenList.len == 0) {
+    ret = json_status_InvalidInput;
+    return ret;
+  }
+
+  size_t offset = 0;
+  ret = parseValue(&tokenList, 0, output, &offset);
+
+  ds_vec_destroyVector_token(&tokenList);
+
+  return ret;
+}
+
+json_Status json_parserNoNul(const char* input, size_t len, json_Value* output) {
+  json_Status ret = json_status_OK;
+
+  ds_Vector_token tokenList;
+  ds_vec_initVector_token(&tokenList, 0);
+
+  lexer(input, len, &tokenList);
   if (tokenList.len == 0) {
     ret = json_status_InvalidInput;
     return ret;
